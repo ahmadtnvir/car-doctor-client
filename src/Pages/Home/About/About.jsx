@@ -2,9 +2,9 @@ import parts from '../../../assets/images/about_us/parts.jpg';
 import person from '../../../assets/images/about_us/person.jpg';
 const About = () => {
   return (
-    <div className="hero min-h-screen bg-base-200 my-24 rounded-xl">
-      <div className="hero-content flex-col lg:flex-row ">
-        <div className='w-1/2 relative'>
+    <div className="hero min-h-screen bg-base-200 my-24 rounded-xl ">
+      <div className="hero-content flex-col lg:flex-row gap-20 lg:gap-0">
+        <div className='lg:w-1/2 relative'>
         <img
           src={person}
           className="w-3/4 rounded-lg shadow-2xl"
@@ -14,7 +14,7 @@ const About = () => {
           className="w-1/2 rounded-lg shadow-2xl absolute top-1/2 right-2 border-8 border-white"
         />
         </div>
-        <div className='w-1/2'>
+        <div className='lg:w-1/2'>
           <p className="text-5 text-[#FF3811] font-bold mb-5">About Us</p>
             <h1 className='text-5xl font-bold text-[#151515] w-3/4 mb-8'>
             We are qualified & of experience in this field
