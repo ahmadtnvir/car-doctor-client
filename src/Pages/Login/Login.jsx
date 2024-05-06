@@ -3,7 +3,10 @@ import { FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form"
+import { useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider";
 const Login = () => {
+  const {logIn} = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -13,7 +16,15 @@ const Login = () => {
   const onSubmit = (data, e) => {
     const form = e.target;
     form.reset();
-    console.log(data)
+    // console.log(data)
+    const {email, password} = data;
+    logIn(email, password)
+      .then(result => {
+        console.log(result.user);
+      })
+      .catch(error => {
+        console.error(error);
+      })
   }
   return (
     <div className="hero min-h-screen bg-base-200 rounded-xl mb-24">

@@ -3,7 +3,10 @@ import { FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider";
 const Register = () => {
+  const { createUser } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -13,7 +16,16 @@ const Register = () => {
   const onSubmit = (data, e) => {
     const form = e.target;
     form.reset();
-    console.log(data);
+    // console.log(data);
+    const { email, password } = data;
+
+    createUser(email, password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   return (
     <div className="hero min-h-screen bg-base-200 rounded-xl mb-24">
@@ -23,7 +35,7 @@ const Register = () => {
         </div>
         <div className="card shrink-0 w-full  max-w-sm shadow-2xl bg-base-100">
           <form onSubmit={handleSubmit(onSubmit)} className="card-body">
-            <h1 className="text-5xl font-bold text-center">Login</h1>
+            <h1 className="text-5xl font-bold text-center">Register</h1>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Name</span>
@@ -62,7 +74,7 @@ const Register = () => {
             </div>
 
             <div className="form-control mt-6">
-              <button className="btn bg-[#FF3811]">Login</button>
+              <button className="btn bg-[#FF3811]">Sign Up</button>
             </div>
             <div className="flex flex-col gap-5 justify-center items-center">
               <p>or Sign in with</p>
