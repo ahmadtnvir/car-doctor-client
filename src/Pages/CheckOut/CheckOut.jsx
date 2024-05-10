@@ -2,23 +2,53 @@ import { useLoaderData } from "react-router-dom";
 import BannerCard from "./BannerCard";
 import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
-import { useForm } from "react-hook-form";
 
 
 const CheckOut = () => {
     const {user} = useContext(AuthContext);
     const service = useLoaderData();
-    const {title, price} = service;
+    const {title, price, _id, img} = service;
 
     
 
-    const {
-        register,
-        handleSubmit,
-        // formState: { errors },
-      } = useForm()
     
-      const onSubmit = (data) => {console.log(data)}
+    
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const name = form.name.value;
+        const date = form.date.value;
+        const email = user?.email;
+        // const price = form.price.value;
+        // const message = form.message.value;
+        const booking = {
+          img,
+          customerName: name, 
+          date, 
+          email, 
+          price: price, 
+          // message: message,
+          service: title,
+          service_id: _id
+        }
+        console.log(booking);
+
+        fetch('http://localhost:5000/bookings', {
+          method: "POST",
+          headers: {
+            'content-type' : 'application/json'
+          },
+          body: JSON.stringify(booking)
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data)
+            if(data.insertedId){
+              alert('Service Booked Successfully!')
+            }
+
+          })
+      }
 
     return (
         <div className='space-y-5'>
@@ -26,7 +56,7 @@ const CheckOut = () => {
             <h1 className="text-3xl font-bold text-center">{title}</h1>
             <div>
         <div className="card shrink-0 shadow-2xl bg-base-100">
-          <form onSubmit={handleSubmit(onSubmit)} className="card-body grid grid-cols-1 md:grid-cols-2 gap-6 ">
+          <form onSubmit={handleSubmit} className="card-body grid grid-cols-1 md:grid-cols-2 gap-6 ">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Name</span>
@@ -35,8 +65,8 @@ const CheckOut = () => {
                 type="text"
                 defaultValue={user?.displayName}
                 placeholder="Name"
+                name="name"
                 className="input input-bordered"
-                {...register("name")}
               />
             </div>
             <div className="form-control">
@@ -47,7 +77,7 @@ const CheckOut = () => {
                 type="date"
                 placeholder="Date"
                 className="input input-bordered"
-                {...register("date")}
+                name="date"
               />
             </div>
             <div className="form-control">
@@ -59,7 +89,7 @@ const CheckOut = () => {
                 defaultValue={user?.email}
                 placeholder="Email"
                 className="input input-bordered"
-                {...register("email")}
+                name="email"
               />
             </div>
             <div className="form-control">
@@ -70,12 +100,11 @@ const CheckOut = () => {
                 type="text"
                 defaultValue={'$'+ price}
                 className="input input-bordered"
-                {...register("price")}
               />
             </div>
-            <div className="form-control col-span-2">
-            <textarea className="textarea textarea-bordered" placeholder="Your Message" {...register("message")}></textarea>
-            </div>
+            {/* <div className="form-control col-span-2">
+            <textarea className="textarea textarea-bordered" placeholder="Your Message" name="message"></textarea>
+            </div> */}
             <div className="form-control mt-6 col-span-2">
               <button className="btn btn-block ">Order Confirm</button>
             </div>
