@@ -31,9 +31,14 @@ const Navbar = () => {
         <NavLink to={"/contact"}>Contact</NavLink>
       </li>
       {user ?. email? (
+        <>
+        <li>
+          <NavLink to={'/bookings'} >My Bookings</NavLink>
+        </li>
         <li>
           <NavLink onClick={handleLogOut} >Log Out</NavLink>
         </li>
+        </>
       ) : (
         <>
           <li>
