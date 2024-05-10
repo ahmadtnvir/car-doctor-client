@@ -13,8 +13,47 @@ const Bookings = () => {
         // console.log(data);
         setBookings(data);
       });
-  }, []);
-  // console.log(bookings);
+  }, [url]);
+
+  const handleDelete = (id) => {
+    const proceed = confirm("Are you sure you want to delete");
+    if (proceed) {
+      fetch(`http://localhost:5000/bookings/${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.deletedCount > 0) {
+            alert("Deleted Successfully!");
+            const remaining = bookings.filter((booking) => booking._id !== id);
+            setBookings(remaining);
+          }
+        });
+    }
+  };
+
+  const handleConfirm = (id) => {
+    fetch(`http://localhost:5000/bookings/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({status: 'confirm'})
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if(data.modifiedCount > 0) {
+            // alert('Update Successfully')
+            const remaining = bookings.filter(booking=> booking._id !== id)
+            const updated = bookings.find(booking => booking._id === id)
+            updated.status = 'confirm'
+            const newBookings = [updated, ...remaining]
+            setBookings(newBookings);
+        }
+      });
+  };
   return (
     <div>
       <h1>My Bookings: {bookings.length}</h1>
@@ -35,44 +74,14 @@ const Bookings = () => {
             </tr>
           </thead>
           <tbody>
-            {
-                bookings?.map(booking => <TableRow key={bookings._id} booking={booking}></TableRow>)
-            }
-            {/* row 1 */}
-            {/* <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <td>
-                <div className="flex items-center gap-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <img
-                        src="https://img.daisyui.com/tailwind-css-component-profile-2@56w.png"
-                        alt="Avatar Tailwind CSS Component"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">Hart Hagerty</div>
-                    <div className="text-sm opacity-50">United States</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                Zemlak, Daniel and Leannon
-                <br />
-                <span className="badge badge-ghost badge-sm">
-                  Desktop Support Technician
-                </span>
-              </td>
-              <td>Purple</td>
-              <th>
-                <button className="btn btn-ghost btn-xs">details</button>
-              </th>
-            </tr> */}
+            {bookings?.map((booking) => (
+              <TableRow
+                key={bookings._id}
+                booking={booking}
+                handleDelete={handleDelete}
+                handleConfirm={handleConfirm}
+              ></TableRow>
+            ))}
           </tbody>
           {/* foot */}
           <tfoot>
