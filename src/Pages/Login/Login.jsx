@@ -1,12 +1,14 @@
 import login from "../../assets/images/login/login.svg";
 import { FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form"
 import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 const Login = () => {
   const {logIn} = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -21,6 +23,7 @@ const Login = () => {
     logIn(email, password)
       .then(result => {
         console.log(result.user);
+        navigate(location?.state ? location?.state : '/')
       })
       .catch(error => {
         console.error(error);
