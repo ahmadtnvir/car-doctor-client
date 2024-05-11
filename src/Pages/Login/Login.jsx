@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form"
 import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
+import axios from "axios";
 const Login = () => {
   const {logIn} = useContext(AuthContext);
   const location = useLocation();
@@ -23,7 +24,13 @@ const Login = () => {
     logIn(email, password)
       .then(result => {
         console.log(result.user);
-        navigate(location?.state ? location?.state : '/')
+        const user = {email};
+        // navigate(location?.state ? location?.state : '/')
+        //get access token
+        axios.post('http://localhost:5000/jwt', user)
+          .then(res => {
+            console.log(res.data);
+          })
       })
       .catch(error => {
         console.error(error);
